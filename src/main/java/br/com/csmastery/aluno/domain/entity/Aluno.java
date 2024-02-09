@@ -1,7 +1,9 @@
 package br.com.csmastery.aluno.domain.entity;
 
 import br.com.csmastery.aluno.domain.dto.AlunoRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -17,27 +19,44 @@ public class Aluno {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
+    @NotNull
     private String nome;
+    @NotNull
     private String cpf;
+    @NotNull
     private String email;
+    @NotNull
     private String telefone;
+    @JsonProperty("nome_socio")
     private String nomeSocio;
+    @JsonProperty("email_socio")
     private String emailSocio;
+    @JsonProperty("telefone_socio")
     private String telefoneSocio;
+    @JsonProperty("status_financeiro")
     private String statusFinanceiro;
+    @JsonProperty("nota_acompanhamento")
     private String nota;
     private String satisfacao;
     private String responsavel;
+    @JsonProperty("data_entrada")
     private Timestamp dataEntrada;
+    @JsonProperty("data_criacao")
     private Timestamp dataCriacao;
+    @JsonProperty("data_renovacao")
     private Timestamp dataRenovacao;
+    @JsonProperty("data_ultimo_contrato")
     private Timestamp dataUltimoContrato;
+    @JsonProperty("data_ultimo_acompanhamento")
     private Timestamp ultimoAcompanhamento;
+    @JsonProperty("data_proximo_contato")
     private Timestamp proximoContato;
+    @JsonProperty("vigencia_contrato")
     private Integer vigenciaContrato;
+    @JsonProperty("ultima_resposta")
     private Integer ultimaResposta;
     private Integer mentoria;
+    @JsonProperty("ciclo_matricula")
     private Integer cicloMatricula;
     private Integer renovado;
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service(value = "AlunoService")
 public class AlunoServiceImpl implements AlunoService{
@@ -20,19 +21,25 @@ public class AlunoServiceImpl implements AlunoService{
     }
 
     @Override
-    public Aluno saveAluno(AlunoRequest alunoRequest) {
-        Aluno aluno = new Aluno(alunoRequest);
+    public Aluno saveAluno(Aluno aluno) {
+        //Aluno aluno = new Aluno(alunoRequest);
         return repository.save(aluno);
     }
 
     @Override
-    public Aluno updateAluno(AlunoRequest alunoRequest) {
-        Aluno aluno = new Aluno(alunoRequest);
+    public Aluno updateAluno(Aluno aluno) {
+        //Aluno aluno = new Aluno(alunoRequest);
         return repository.save(aluno);
     }
 
     @Override
     public void deleteAluno(String id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Aluno> findById(String id) {
+        Optional<Aluno> aluno = repository.findById(id);
+        return aluno;
     }
 }
