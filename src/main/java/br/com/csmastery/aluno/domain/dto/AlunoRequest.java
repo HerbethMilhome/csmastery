@@ -2,6 +2,7 @@ package br.com.csmastery.aluno.domain.dto;
 
 import br.com.csmastery.aluno.domain.entity.Endereco;
 import br.com.csmastery.aluno.domain.entity.SituacaoAluno;
+import br.com.csmastery.enums.SimNao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,7 +13,6 @@ public record AlunoRequest(
         Optional<String> id,
         @NotBlank
         String nome,
-        @NotBlank
         String cpf,
         @NotBlank
         String email,
@@ -37,5 +37,6 @@ public record AlunoRequest(
         Optional<Integer> cicloMatricula,
         Optional<Integer> renovado,
         Optional<SituacaoAluno> situacao,
-        Optional<Endereco> endereco
+        Optional<Endereco> endereco,
+        Integer removido
 ) { }

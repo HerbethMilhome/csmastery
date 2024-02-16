@@ -3,8 +3,11 @@ package br.com.csmastery.aluno.domain.entity;
 import br.com.csmastery.aluno.domain.dto.AlunoRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 
@@ -15,51 +18,92 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE alunos SET removido = 1 WHERE id = ?")
+@Where(clause = "removido = 0")
 public class Aluno {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
     @NotNull
+    @NotBlank
+    @Column(length = 100, nullable = false)
     private String nome;
-    @NotNull
+
     private String cpf;
+
     @NotNull
+    @NotBlank
     private String email;
+
     @NotNull
+    @NotBlank
     private String telefone;
+
     @JsonProperty("nome_socio")
     private String nomeSocio;
+
     @JsonProperty("email_socio")
     private String emailSocio;
+
     @JsonProperty("telefone_socio")
     private String telefoneSocio;
+
     @JsonProperty("status_financeiro")
     private String statusFinanceiro;
+
     @JsonProperty("nota_acompanhamento")
     private String nota;
+
     private String satisfacao;
+
     private String responsavel;
+
     @JsonProperty("data_entrada")
     private Timestamp dataEntrada;
+
     @JsonProperty("data_criacao")
     private Timestamp dataCriacao;
+
     @JsonProperty("data_renovacao")
     private Timestamp dataRenovacao;
+
     @JsonProperty("data_ultimo_contrato")
     private Timestamp dataUltimoContrato;
+
     @JsonProperty("data_ultimo_acompanhamento")
     private Timestamp ultimoAcompanhamento;
+
     @JsonProperty("data_proximo_contato")
     private Timestamp proximoContato;
+
     @JsonProperty("vigencia_contrato")
     private Integer vigenciaContrato;
+
     @JsonProperty("ultima_resposta")
     private Integer ultimaResposta;
+
     private Integer mentoria;
     @JsonProperty("ciclo_matricula")
     private Integer cicloMatricula;
+
     private Integer renovado;
 
+    private Integer removido;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "aluno")
+    private Endereco endereco;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private SituacaoAluno situacaoAluno;
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+        if (endereco != null) {
+            endereco.setAluno(this);
+        }
+    }
     public Aluno(AlunoRequest aluno) {
 
         aluno.id().ifPresent(id -> this.id = id);
@@ -68,6 +112,7 @@ public class Aluno {
         this.cpf = aluno.cpf();
         this.email = aluno.email();
         this.telefone = aluno.telefone();
+        this.removido = aluno.removido();
 
         aluno.nomeSocio().ifPresent(n -> this.nomeSocio = n);
         aluno.emailSocio().ifPresent(e -> this.emailSocio = e);
