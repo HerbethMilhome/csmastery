@@ -1,5 +1,6 @@
 package br.com.csmastery.aluno.controller;
 
+import br.com.csmastery.aluno.domain.dto.AlunoRequest;
 import br.com.csmastery.aluno.domain.entity.Aluno;
 import br.com.csmastery.aluno.services.AlunoService;
 import jakarta.validation.constraints.NotNull;
@@ -25,8 +26,11 @@ public class AlunoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Aluno> getById(@PathVariable @NotNull String id) {
+    public ResponseEntity<AlunoRequest> getById(@PathVariable @NotNull String id) {
         var aluno = service.findById(id);
+        if (aluno == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok().body(aluno);
     }
 

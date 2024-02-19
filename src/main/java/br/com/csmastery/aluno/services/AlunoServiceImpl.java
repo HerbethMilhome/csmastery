@@ -1,5 +1,7 @@
 package br.com.csmastery.aluno.services;
 
+import br.com.csmastery.aluno.domain.dto.AlunoRequest;
+import br.com.csmastery.aluno.domain.dto.mapper.AlunoMapper;
 import br.com.csmastery.aluno.domain.entity.Aluno;
 import br.com.csmastery.aluno.domain.entity.Endereco;
 import br.com.csmastery.aluno.repository.AlunoRepository;
@@ -13,10 +15,13 @@ import java.util.List;
 
 @Validated
 @Service(value = "AlunoService")
-public class AlunoServiceImpl implements AlunoService{
+public class AlunoServiceImpl implements AlunoService {
 
     @Autowired
     private AlunoRepository repository;
+
+    @Autowired
+    private AlunoMapper alunoMapper;
 
     @Override
     public List<Aluno> getAllAlunos(){
@@ -39,7 +44,8 @@ public class AlunoServiceImpl implements AlunoService{
     }
 
     @Override
-    public Aluno findById(@NotNull String id) {
-        return repository.findById(id).orElseThrow(() -> new RecordNotFindException(id));
+    public AlunoRequest findById(@NotNull String id) {
+        return repository.findById(id)
+            .map(alunoMapper::toRequest).orElseThrow(() -> new RecordNotFindException(id));
     }
 }

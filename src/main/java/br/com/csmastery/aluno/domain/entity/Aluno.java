@@ -1,6 +1,7 @@
 package br.com.csmastery.aluno.domain.entity;
 
-import br.com.csmastery.aluno.domain.dto.AlunoRequest;
+import br.com.csmastery.atendente.domain.entity.Atendente;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -57,8 +58,6 @@ public class Aluno {
 
     private String satisfacao;
 
-    private String responsavel;
-
     @JsonProperty("data_entrada")
     private Timestamp dataEntrada;
 
@@ -84,6 +83,7 @@ public class Aluno {
     private Integer ultimaResposta;
 
     private Integer mentoria;
+
     @JsonProperty("ciclo_matricula")
     private Integer cicloMatricula;
 
@@ -95,8 +95,13 @@ public class Aluno {
     private Endereco endereco;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "situacao_id")
     private SituacaoAluno situacaoAluno;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "atendente_id")
+    @JsonBackReference
+    private Atendente atendente;
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
@@ -104,35 +109,12 @@ public class Aluno {
             endereco.setAluno(this);
         }
     }
-    public Aluno(AlunoRequest aluno) {
 
-        aluno.id().ifPresent(id -> this.id = id);
-
-        this.nome = aluno.nome();
-        this.cpf = aluno.cpf();
-        this.email = aluno.email();
-        this.telefone = aluno.telefone();
-        this.removido = aluno.removido();
-
-        aluno.nomeSocio().ifPresent(n -> this.nomeSocio = n);
-        aluno.emailSocio().ifPresent(e -> this.emailSocio = e);
-        aluno.telefoneSocio().ifPresent(t -> this.telefoneSocio = t);
-        aluno.statusFinanceiro().ifPresent(s -> this.statusFinanceiro = s);
-        aluno.nota().ifPresent(n -> this.nota = n);
-        aluno.satisfacao().ifPresent(s -> this.satisfacao = s);
-        aluno.responsavel().ifPresent(r -> this.responsavel = r);
-        aluno.dataEntrada().ifPresent(d -> this.dataEntrada = d);
-        aluno.dataCriacao().ifPresent(d -> this.dataCriacao = d);
-        aluno.dataRenovacao().ifPresent(d -> this.dataRenovacao = d);
-        aluno.dataUltimoContrato().ifPresent(d -> this.dataUltimoContrato = d);
-        aluno.ultimoAcompanhamento().ifPresent(u -> this.ultimoAcompanhamento = u);
-        aluno.proximoContato().ifPresent(p -> this.proximoContato = p);
-        aluno.vigenciaContrato().ifPresent(v -> this.vigenciaContrato = v);
-        aluno.ultimaResposta().ifPresent(u -> this.ultimaResposta = u);
-        aluno.mentoria().ifPresent(m -> this.mentoria = m);
-        aluno.cicloMatricula().ifPresent(c -> this.cicloMatricula = c);
-        aluno.renovado().ifPresent(r -> this.renovado = r);
-
+    public void setAtendente(Atendente atendente) {
+        this.atendente = atendente;
+        if (atendente != null) {
+            atendente.getAlunos().add(this);
+        }
     }
 
 }

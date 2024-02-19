@@ -2,15 +2,15 @@ package br.com.csmastery.aluno.domain.dto;
 
 import br.com.csmastery.aluno.domain.entity.Endereco;
 import br.com.csmastery.aluno.domain.entity.SituacaoAluno;
-import br.com.csmastery.enums.SimNao;
+import br.com.csmastery.atendente.domain.entity.Atendente;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
-import java.util.Optional;
 
 public record AlunoRequest(
-        Optional<String> id,
+        String id,
         @NotBlank
         String nome,
         String cpf,
@@ -18,25 +18,43 @@ public record AlunoRequest(
         String email,
         @NotBlank
         String telefone,
-        Optional<String> nomeSocio,
-        Optional<String> emailSocio,
-        Optional<String> telefoneSocio,
-        Optional<String> statusFinanceiro,
-        Optional<String> nota,
-        Optional<String> satisfacao,
-        Optional<String> responsavel,
-        Optional<Timestamp> dataEntrada,
-        Optional<Timestamp> dataCriacao,
-        Optional<Timestamp> dataRenovacao,
-        Optional<Timestamp> dataUltimoContrato,
-        Optional<Timestamp> ultimoAcompanhamento,
-        Optional<Timestamp> proximoContato,
-        Optional<Integer> vigenciaContrato,
-        Optional<Integer> ultimaResposta,
-        Optional<Integer> mentoria,
-        Optional<Integer> cicloMatricula,
-        Optional<Integer> renovado,
-        Optional<SituacaoAluno> situacao,
-        Optional<Endereco> endereco,
-        Integer removido
-) { }
+        @JsonProperty("nome_socio")
+        String nomeSocio,
+        @JsonProperty("email_socio")
+        String emailSocio,
+        @JsonProperty("telefone_socio")
+        String telefoneSocio,
+
+        @JsonProperty("status_financeiro")
+        String statusFinanceiro,
+        @JsonProperty("nota_acompanhamento")
+        String nota,
+        String satisfacao,
+        @JsonProperty("data_entrada")
+        Timestamp dataEntrada,
+        @JsonProperty("data_criacao")
+        Timestamp dataCriacao,
+        @JsonProperty("data_renovacao")
+        Timestamp dataRenovacao,
+        @JsonProperty("data_ultimo_contrato")
+        Timestamp dataUltimoContrato,
+        @JsonProperty("data_ultimo_acompanhamento")
+        Timestamp ultimoAcompanhamento,
+
+        @JsonProperty("data_proximo_contato")
+        Timestamp proximoContato,
+        @JsonProperty("vigencia_contrato")
+        Integer vigenciaContrato,
+        @JsonProperty("ultima_resposta")
+        Integer ultimaResposta,
+        Integer mentoria,
+        @JsonProperty("ciclo_matricula")
+        Integer cicloMatricula,
+        Integer renovado,
+        Integer removido,
+        SituacaoAluno situacao,
+        Endereco endereco,
+        Atendente atendente
+
+) {
+}
