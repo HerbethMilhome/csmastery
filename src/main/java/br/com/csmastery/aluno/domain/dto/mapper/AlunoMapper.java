@@ -37,7 +37,7 @@ public class AlunoMapper {
             aluno.getCicloMatricula(),
             aluno.getRenovado(),
             aluno.getRemovido(),
-            aluno.getSituacaoAluno(),
+            aluno.getSituacaoFinanceira(),
             aluno.getEndereco(),
             aluno.getAtendente());
     }
@@ -74,7 +74,7 @@ public class AlunoMapper {
         aluno.setCicloMatricula(alunoRequest.cicloMatricula());
         aluno.setRenovado(alunoRequest.renovado());
         aluno.setRemovido(alunoRequest.removido());
-        aluno.setSituacaoAluno(alunoRequest.situacao());
+        aluno.setSituacaoFinanceira(alunoRequest.situacao());
         aluno.setEndereco(alunoRequest.endereco());
         aluno.setAtendente(alunoRequest.atendente());
 

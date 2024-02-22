@@ -1,7 +1,7 @@
 package br.com.csmastery.aluno.domain.dto;
 
 import br.com.csmastery.aluno.domain.entity.Endereco;
-import br.com.csmastery.aluno.domain.entity.SituacaoAluno;
+import br.com.csmastery.aluno.domain.entity.SituacaoFinanceira;
 import br.com.csmastery.atendente.domain.entity.Atendente;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -52,7 +52,7 @@ public record AlunoRequest(
         Integer cicloMatricula,
         Integer renovado,
         Integer removido,
-        SituacaoAluno situacao,
+        SituacaoFinanceira situacao,
         Endereco endereco,
         Atendente atendente
 

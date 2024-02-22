@@ -1,21 +1,13 @@
 package br.com.csmastery.atendente.domain.entity;
 
-import br.com.csmastery.aluno.domain.dto.AlunoRequest;
 import br.com.csmastery.aluno.domain.entity.Aluno;
-import br.com.csmastery.aluno.domain.entity.Endereco;
-import br.com.csmastery.aluno.domain.entity.SituacaoAluno;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +18,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Atendente {
+public class Atendente implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -47,8 +39,7 @@ public class Atendente {
     private String telefone;
 
     @OneToMany(mappedBy = "atendente", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    @Null
+    @JsonBackReference
     private List<Aluno> alunos = new ArrayList<>();
 
     public Atendente(String id) {

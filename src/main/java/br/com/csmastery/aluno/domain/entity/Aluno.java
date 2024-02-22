@@ -1,7 +1,6 @@
 package br.com.csmastery.aluno.domain.entity;
 
 import br.com.csmastery.atendente.domain.entity.Atendente;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE alunos SET removido = 1 WHERE id = ?")
 @Where(clause = "removido = 0")
-public class Aluno {
+public class Aluno implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -96,11 +96,13 @@ public class Aluno {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "situacao_id")
-    private SituacaoAluno situacaoAluno;
+    @JsonProperty("situacao_financeira")
+    //@JsonManagedReference
+    private SituacaoFinanceira situacaoFinanceira;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "atendente_id")
-    @JsonBackReference
+    //@JsonManagedReference
     private Atendente atendente;
 
     public void setEndereco(Endereco endereco) {
