@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/aluno").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/situacao-financeira").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/atendente").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/atendente").permitAll()
                         //.requestMatchers(HttpMethod.GET, "/api/atendente").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

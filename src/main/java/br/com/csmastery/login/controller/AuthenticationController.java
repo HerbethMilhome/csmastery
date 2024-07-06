@@ -1,9 +1,10 @@
 package br.com.csmastery.login.controller;
 
 import br.com.csmastery.login.config.TokenService;
-import br.com.csmastery.login.usuario.domain.Usuario;
+import br.com.csmastery.login.usuario.domain.CredencialUsuario;
 import br.com.csmastery.login.usuario.domain.dto.AuthenticationDTO;
 import br.com.csmastery.login.usuario.domain.dto.RegistroDTO;
+import br.com.csmastery.login.usuario.domain.dto.TokenDTO;
 import br.com.csmastery.login.usuario.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,26 +33,27 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody @Valid AuthenticationDTO dto) {
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthenticationDTO dto) {
         var loginSenha = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
         org.springframework.security.core.Authentication auth = null;
+        String convertJSON;
         try {
             auth = authenticationManager.authenticate(loginSenha);
         } catch (Exception e) {
             e.printStackTrace();
-            String convertJSON = "{\"token\": \"\"}";
-            return ResponseEntity.ok(convertJSON);
+            convertJSON = "{\"token\": \"\"}";
+            return ResponseEntity.ok().body(TokenDTO.builder().token(convertJSON).type("Bearer").build());
         }
 
-        String token = tokenService.generateToken((Usuario) auth.getPrincipal());
-        Usuario principal = (Usuario) auth.getPrincipal();
+        CredencialUsuario principal = (CredencialUsuario) auth.getPrincipal();
+        String token = tokenService.generateToken(principal);
         String login = principal.getLogin();
         String role = principal.getRole().name();
 
-        String convertJSON = "{\"token\": \"" + token + "\", " +
+        convertJSON = "{\"token\": \"" + token + "\", " +
                 " \"user\": \"" + login + "\", \"role\": \"" + role + "\"}";
 
-        return ResponseEntity.ok(convertJSON);
+        return ResponseEntity.ok().body(TokenDTO.builder().token(convertJSON).type("Bearer").build());
     }
 
     @PostMapping("registrar")
@@ -62,7 +64,7 @@ public class AuthenticationController {
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.senha());
-        Usuario usuario = new Usuario(dto.login(), encryptedPassword, dto.role());
+        CredencialUsuario usuario = new CredencialUsuario(dto.login(), encryptedPassword, dto.role());
 
         this.repository.save(usuario);
 

@@ -1,6 +1,6 @@
 package br.com.csmastery.login.config;
 
-import br.com.csmastery.login.usuario.domain.Usuario;
+import br.com.csmastery.login.usuario.domain.CredencialUsuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 @Service
 public class TokenService {
@@ -17,16 +18,16 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Usuario usuario) {
+    public String generateToken(CredencialUsuario usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
-                    .withIssuer("auth-api")
+            Date today = new Date();
+            return JWT.create()
+                    .withIssuer("auth-api-csmastery")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(genExpiracaoData())
+                    .withIssuedAt(today)
                     .sign(algorithm);
-
-            return token;
 
         } catch (JWTCreationException e) {
             e.printStackTrace();
@@ -37,13 +38,12 @@ public class TokenService {
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String result = JWT.require(algorithm)
-                    .withIssuer("auth-api")
+
+            return JWT.require(algorithm)
+                    .withIssuer("auth-api-csmastery")
                     .build()
                     .verify(token)
                     .getSubject();
-
-            return result;
         } catch (JWTCreationException e) {
             return "";
         }

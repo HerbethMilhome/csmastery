@@ -12,13 +12,13 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "credencial_usuario")
 @EqualsAndHashCode(of = "id")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario implements UserDetails {
+public class CredencialUsuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,7 +32,7 @@ public class Usuario implements UserDetails {
 
     private UsuarioRole role;
 
-    public Usuario(String login, String senha, UsuarioRole role) {
+    public CredencialUsuario(String login, String senha, UsuarioRole role) {
         this.login = login;
         this.senha = senha;
         this.role = role;
