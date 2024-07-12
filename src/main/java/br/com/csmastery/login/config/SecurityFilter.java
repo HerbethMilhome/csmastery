@@ -9,55 +9,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    TokenService tokenService;
+    private final TokenService tokenService;
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
-
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request,
-//                                    HttpServletResponse response,
-//                                    FilterChain filterChain) throws ServletException, IOException {
-//        String header = request.getHeader("Authorization");
-//        String token = null;
-//
-//        if (header != null && header.startsWith("Bearer ")) {
-//            token = header.substring(7); // Remove "Bearer " da frente do token
-//        }
-//
-//        if (token != null && validateToken(token)) { // Implemente sua lógica de validação de token aqui
-//            PreAuthenticatedAuthenticationToken authToken = new PreAuthenticatedAuthenticationToken(token, null);
-//            SecurityContextHolder.getContext().setAuthentication(authToken);
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
-//
-//    private boolean validateToken(String token) {
-//        // Sua lógica para validar o token JWT
-//        return true; // Apenas como exemplo, ajuste conforme necessário
-//    }
+    public SecurityFilter(TokenService tokenService, UsuarioRepository usuarioRepository) {
+        this.tokenService = tokenService;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = this.recoverToken(request);
+        try {
+            var token = this.recoverToken(request);
 
-        if (token != null) {
-            var login = tokenService.validateToken(token);
-            UserDetails user = usuarioRepository.findByLogin(login);
+            if (token != null) {
+                var login = tokenService.validateToken(token);
+                UserDetails user = usuarioRepository.findByLogin(login);
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (user != null) {
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Falha na autenticação do usuário", e);
         }
         filterChain.doFilter(request, response);
     }
@@ -66,7 +53,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         var authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null) {
+        if (Objects.isNull(authHeader)) {
             return null;
         }
 

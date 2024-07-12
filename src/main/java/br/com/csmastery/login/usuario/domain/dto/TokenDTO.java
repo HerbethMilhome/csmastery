@@ -7,6 +7,10 @@ public record TokenDTO(
 
         String token,
 
-        String type
+        String type,
+
+        String login,
+
+        String role
 ) {
 }
