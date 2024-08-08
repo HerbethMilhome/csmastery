@@ -1,8 +1,8 @@
-package br.com.csmastery.aluno.services;
+package br.com.csmastery.aluno.services.impl;
 
-import br.com.csmastery.aluno.domain.dto.mapper.AlunoMapper;
 import br.com.csmastery.aluno.domain.entity.SituacaoFinanceira;
 import br.com.csmastery.aluno.repository.SituacaoFinanceiraRepository;
+import br.com.csmastery.aluno.services.SituacaoFinanceiraService;
 import br.com.csmastery.exception.RecordNotFindException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

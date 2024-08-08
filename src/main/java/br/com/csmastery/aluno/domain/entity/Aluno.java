@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Entity
 @Table(name = "alunos")
@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE alunos SET removido = 1 WHERE id = ?")
-@Where(clause = "removido = 0")
+//@Where(clause = "removido = 0")
 public class Aluno implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
@@ -105,10 +105,10 @@ public class Aluno implements Serializable {
     //@JsonManagedReference
     private Atendente atendente;
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-        if (endereco != null) {
-            endereco.setAluno(this);
+    public void setEndereco(Optional<Endereco> endereco) {
+        this.endereco = endereco.orElse(null);
+        if (this.endereco != null) {
+            this.endereco.setAluno(this);
         }
     }
 

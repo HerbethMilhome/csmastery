@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.Optional;
+
 @Entity
 @Table(name = "enderecos")
 @EqualsAndHashCode(of = "id")
@@ -55,7 +57,7 @@ public class Endereco {
     public void setAluno(Aluno aluno) {
         this.aluno = aluno;
         if (aluno != null && !aluno.getEndereco().equals(this)) {
-            aluno.setEndereco(this);
+            aluno.setEndereco(Optional.of(this));
         }
     }
 

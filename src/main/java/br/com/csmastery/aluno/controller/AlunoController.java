@@ -11,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/aluno")
 @Validated
@@ -38,6 +40,13 @@ public class AlunoController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public Aluno saveAluno(@RequestBody @Valid Aluno aluno) {
         return service.saveAluno(aluno);
+    }
+
+    @PostMapping("/import")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public ResponseEntity<String> importListAluno(@RequestBody List<Aluno> alunos) {
+        service.importListAluno(alunos);
+        return ResponseEntity.ok("ok");
     }
 
     @PutMapping

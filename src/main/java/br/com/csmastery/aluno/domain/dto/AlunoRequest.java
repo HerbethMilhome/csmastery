@@ -53,7 +53,7 @@ public record AlunoRequest(
         Integer renovado,
         Integer removido,
         SituacaoFinanceira situacao,
-        Endereco endereco,
+        java.util.Optional<Endereco> endereco,
         Atendente atendente
 
 ) {

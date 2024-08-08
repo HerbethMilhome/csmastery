@@ -4,6 +4,8 @@ import br.com.csmastery.aluno.domain.dto.AlunoRequest;
 import br.com.csmastery.aluno.domain.entity.Aluno;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class AlunoMapper {
 
@@ -38,7 +40,7 @@ public class AlunoMapper {
             aluno.getRenovado(),
             aluno.getRemovido(),
             aluno.getSituacaoFinanceira(),
-            aluno.getEndereco(),
+            Optional.ofNullable(aluno.getEndereco()),
             aluno.getAtendente());
     }
 
