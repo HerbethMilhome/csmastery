@@ -3,7 +3,10 @@ package br.com.csmastery.aluno.controller;
 import br.com.csmastery.aluno.domain.dto.AlunoRequest;
 import br.com.csmastery.aluno.domain.entity.Aluno;
 import br.com.csmastery.aluno.services.AlunoService;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +25,9 @@ public class AlunoController {
     private AlunoService service;
 
     @GetMapping
-    public ResponseEntity getAllAlunos() {
-        var allAlunos = service.getAllAlunos();
+    public ResponseEntity getAllAlunos(@RequestParam(defaultValue = "0") @PositiveOrZero int page,
+                                       @RequestParam(defaultValue = "10") @Positive @Max(100) int pageSize) {
+        var allAlunos = service.getAllAlunos(page, pageSize);
         return ResponseEntity.ok(allAlunos);
     }
 

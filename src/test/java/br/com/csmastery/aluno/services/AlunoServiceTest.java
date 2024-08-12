@@ -39,7 +39,7 @@ public class AlunoServiceTest {
         list.add(a2);
 
         Mockito.when(repository.findAll()).thenReturn(list);
-        Assertions.assertEquals(2, service.getAllAlunos().size());
+        Assertions.assertEquals(2, service.getAllAlunos(0, 5).alunos().size());
         Mockito.verify(repository, Mockito.times(1)).findAll();
     }
 
