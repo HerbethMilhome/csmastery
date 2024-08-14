@@ -75,4 +75,16 @@ public class AlunoServiceImpl implements AlunoService {
         return repository.findById(id)
             .map(alunoMapper::toRequest).orElseThrow(() -> new RecordNotFindException(id));
     }
+
+    @Override
+    public AlunoPageDto findByNomeContainingIgnoreCase(String filterName, int page, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<Aluno> alunoPage = repository.findByNomeContainingIgnoreCase(filterName, pageRequest);
+
+        return new AlunoPageDto(
+                alunoPage.getContent(),
+                alunoPage.getTotalElements(),
+                alunoPage.getTotalPages()
+        );
+    }
 }

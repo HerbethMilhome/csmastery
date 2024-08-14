@@ -17,9 +17,11 @@ public interface AlunoService {
 
     public void importListAluno(List<Aluno> alunos);
 
-    Aluno updateAluno(Aluno aluno);
+    public Aluno updateAluno(Aluno aluno);
 
-    void deleteAluno(String id);
+    public void deleteAluno(String id);
 
-    AlunoRequest findById(String id);
+    public AlunoRequest findById(String id);
+
+    public AlunoPageDto findByNomeContainingIgnoreCase(String filter, int page, int pageSize);
 }

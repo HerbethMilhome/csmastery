@@ -26,9 +26,13 @@ public class AlunoController {
 
     @GetMapping
     public ResponseEntity getAllAlunos(@RequestParam(defaultValue = "0") @PositiveOrZero int page,
-                                       @RequestParam(defaultValue = "10") @Positive @Max(100) int pageSize) {
-        var allAlunos = service.getAllAlunos(page, pageSize);
-        return ResponseEntity.ok(allAlunos);
+                                       @RequestParam(defaultValue = "10") @Positive @Max(100) int pageSize,
+                                       @RequestParam(required = false) String filter) {
+        if (filter != null && !filter.isEmpty()) {
+            return ResponseEntity.ok(service.findByNomeContainingIgnoreCase(filter, page, pageSize));
+        } else {
+            return ResponseEntity.ok(service.getAllAlunos(page, pageSize));
+        }
     }
 
     @GetMapping("/{id}")
